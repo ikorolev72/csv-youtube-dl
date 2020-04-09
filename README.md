@@ -22,15 +22,17 @@ install application
 ```bash
 git clone https://github.com/ikorolev72/csv-youtube-dl.git
 cd csv-youtube-dl
-unzip master.zip
+
 ```
 
 
 ## How to run
-Make the copy of config file `data/config.json` and edit required values. Then simple run script.
+Make the copy of config file `data/config.json` and edit required values. 
+Check values in `data/test.csv` and then simple run script.
 ```bash
 cp data/config.json data/config.json.orig
 vi data/config.json
+vi data/test.csv
 
 python3 do_video.py --csv data/test.csv
 ```
@@ -38,10 +40,10 @@ python3 do_video.py --csv data/test.csv
 ## Usage
 You can define alternative config file with `--config` option :
 ``` bash
-usage: python3 do_upload2.py -d file.csv [-h] [-c CONFIG] [-v]
+usage: python3 do_video.py -d file.csv [-h] [-c CONFIG] [-v]
 
 arguments:
-  -d file.csv           file with data
+  -d file.csv           csv file with data
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
                         Path to config file
@@ -82,7 +84,7 @@ Header with column names - required!
  + time_start (in seconds)
  + time_finish (in seconds from the start of the video)
  + link (link to a youtube video from the start of the video)
- + make_vertical (boolean). F make_vertical = 1, then ffmpeg cuts a 9:16 vertical fragment from the video (symmetrical relative to the center of the video) from "time_start" to "time_finish". IF make_vertical = 0, then 
+ + make_vertical (boolean). if make_vertical = 1, then ffmpeg cuts a 9:16 vertical fragment from the video (symmetrical relative to the center of the video) from "time_start" to "time_finish". IF make_vertical = 0, then 
 ffmpeg coverts the 16:9 original video to 9:16 with two black strips on either side
  + placeholder (a jpg file name) . if "placeholder" is not empty, ffmpeg places a static jpg placeholder on both sides or top/bottom as "both_sides"
  + both_sides (integer ) 1 = top & bottom, 2 = only top-side, 3 = only bottom-side

@@ -80,10 +80,11 @@ class processing:
 
         width = self.width
         height = self.height
-
-        if int(make_vertical) == 1:
-            width = self.height
-            height = self.width
+        if "0" == str(make_vertical):
+            cropFilter = "scale=w=min(iw*"+height+"/ih\,"+width+"):h=min(" + \
+                height+"\,ih*"+width + "/iw), setsar=1 "
+        else:
+            cropFilter = "scale=h="+height+":w=-2, crop=h="+height+":w="+width+", setsar=1"
 
         i = 1
         if "0" == str(placeholder) or not os.path.isfile(placeholder):
@@ -95,18 +96,18 @@ class processing:
             inputPlaceholder = "-loop 1 -i "+placeholder + \
                 " -ss "+time_start+" -to "+time_finish
 
-            if "1"==both_sides : # both
+            if "1" == both_sides:  # both
                 placeholderFilter = "["+str(placeholderIndex)+":v] scale=w="+width + \
-                ":h="+height + \
-                ", setsar=1 [placeholder]; [black][placeholder] overlay [video_bg]; " 
-            if "2"==both_sides : # top
+                    ":h="+height + \
+                    ", setsar=1 [placeholder]; [black][placeholder] overlay [video_bg]; "
+            if "2" == both_sides:  # top
                 placeholderFilter = "["+str(placeholderIndex)+":v]scale=w="+width + \
-                ":h="+height + \
-                ", setsar=1, crop=w=iw:h=ih/2:x=0:y=0  [placeholder]; [black][placeholder] overlay [video_bg]; "   
-            if "3"==both_sides : # bottom
+                    ":h="+height + \
+                    ", setsar=1, crop=w=iw:h=ih/2:x=0:y=0  [placeholder]; [black][placeholder] overlay [video_bg]; "
+            if "3" == both_sides:  # bottom
                 placeholderFilter = "["+str(placeholderIndex)+":v]scale=w="+width + \
-                ":h="+height + \
-                ", setsar=1, crop=w=iw:h=ih/2:x=0:y=ih/2  [placeholder]; [black][placeholder] overlay=y=H/2[video_bg]; "                                        
+                    ":h="+height + \
+                    ", setsar=1, crop=w=iw:h=ih/2:x=0:y=ih/2  [placeholder]; [black][placeholder] overlay=y=H/2[video_bg]; "
             i = i+1
 
         inputWatermark = ""
@@ -123,8 +124,6 @@ class processing:
             watermarkOverlay = "["+str(watermarkIndex) + \
                 ":v] null [watermark]; [video_fg][watermark] overlay=x=W-w:y=H-h[v]"
 
-
-
         cmd = ' '.join([self.ffmpeg,
                         "-y",
                         "-loglevel",
@@ -133,9 +132,8 @@ class processing:
                         inputPlaceholder,
                         inputWatermark,
                         "-filter_complex",
-                        "\"color=black:s="+width+"x"+height+ "[black];",
-                        "[0:v]scale=w=min(iw*"+height+"/ih\,"+width+"):h=min("+height+"\,ih*"+width +
-                        "/iw), setsar=1 [video];",
+                        "\"color=black:s="+width+"x"+height + "[black];",
+                        "[0:v] "+cropFilter+"[video];",
                         placeholderFilter,
                         "[video_bg][video] overlay=x=(W-w)/2:y=(H-h)/2 [video_fg];",
                         watermarkOverlay,
