@@ -1,0 +1,15 @@
+{
+  "general": {    
+    "youtube-dl" : "youtube-dl",
+    "ffmpeg": "ffmpeg",
+    "ffprobe": "ffprobe",
+    "ffmpegLogLevel": "info",
+    "tmpDir": "tmp",  
+    "outputDir": "./output" 
+  },
+  "video": {
+    "watermarkFile" : "images/watermark.png",
+    "width": 852,
+    "height": 480
+  }
+ }
