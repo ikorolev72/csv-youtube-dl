@@ -58,10 +58,10 @@ class processing:
         dt = today.strftime('%Y-%m-%d %H:%M:%S')
         sys.stderr.write(dt+" "+message+"\n")
         try:
-            # if not os.path.isfile(self.logFile):
-            #    f=open(self.logFile, "w")
-            # else:
-            f = open(self.logFile, "a")
+            if not os.path.isfile(self.logFile):
+               f=open(self.logFile, "w")
+            else:
+                f = open(self.logFile, "a")
             f.write(dt+" "+message+"\n")
             f.close()
         except:
