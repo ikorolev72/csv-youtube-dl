@@ -7,7 +7,6 @@ import subprocess
 import json
 from random import randint
 import time
-import wget
 import zlib
 import unicodedata
 import hashlib
