@@ -127,6 +127,7 @@ def main():
                         "Error: Cannot download file for url:" + line['link'])
                     continue
 
+                filesForRemove.append(file)
                 # prepare ffmpeg command
                 outputFile = config['general']['outputDir'] + \
                     '/' + videoId + '.mp4'
@@ -150,11 +151,11 @@ def main():
     except IOError:
         print(("Error: Cannot read csv file: "+csvDataFile))
         processing.writeLog("Info: Script finished")
-        # processing.removeTmpFiles(filesForRemove)
+        processing.removeTmpFiles(filesForRemove)
         sys.exit(1)
 
     processing.writeLog("Info: Script finished")
-    # processing.removeTmpFiles(filesForRemove)
+    processing.removeTmpFiles(filesForRemove)
     sys.exit(0)
 
 
