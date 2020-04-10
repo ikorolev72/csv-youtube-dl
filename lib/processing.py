@@ -92,8 +92,7 @@ class processing:
         placeholderFilter = "[black] null [video_bg];"
         if "0" != str(placeholder):
             placeholderIndex = i
-            inputPlaceholder = "-loop 1 -i "+placeholder + \
-                " -ss "+time_start+" -to "+time_finish
+            inputPlaceholder = " -ss "+time_start+" -to "+time_finish+" -loop 1 -i "+placeholder 
 
             if "1" == both_sides:  # both
                 placeholderFilter = "["+str(placeholderIndex)+":v] scale=w="+width + \
@@ -118,8 +117,8 @@ class processing:
         if int(watermark) == 1:
             watermarkIndex = i
             i = i+1
-            inputWatermark = "-loop 1 -i "+self.watermarkFile + \
-                " -ss "+time_start+" -to "+time_finish
+            inputWatermark = " -ss "+time_start+" -to "+time_finish+" -loop 1 -i "+self.watermarkFile
+                
             watermarkOverlay = "["+str(watermarkIndex) + \
                 ":v] null [watermark]; [video_fg][watermark] overlay=x=W-w:y=H-h[v]"
 
@@ -127,7 +126,7 @@ class processing:
                         "-y",
                         "-loglevel",
                         self.logLevel,
-                        "-i "+tmpFile+" -ss "+time_start+" -to "+time_finish,
+                        " -ss "+time_start+" -to "+time_finish +"-i "+tmpFile,
                         inputPlaceholder,
                         inputWatermark,
                         "-filter_complex",
