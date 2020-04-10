@@ -126,7 +126,7 @@ class processing:
                         "-y",
                         "-loglevel",
                         self.logLevel,
-                        " -ss "+time_start+" -to "+time_finish +"-i "+tmpFile,
+                        " -ss "+time_start+" -to "+time_finish +" -i "+tmpFile,
                         inputPlaceholder,
                         inputWatermark,
                         "-filter_complex",
