@@ -1,9 +1,18 @@
 # Download a video from youtube using a CSV file and convert it according to the rules
 
 ## Version
-#### 1.0 20200409
+#### 1.1.1 20200411
   + initial version
 
+
+#### Whats new
+1.1.1 20200411
+  
+  + Fixed errors
+  + Video codec changed to h264
+
+1.0 20200409
+  + initial version
 
 ## How to install
 

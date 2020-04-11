@@ -137,7 +137,8 @@ class processing:
                         "[video_bg][video] overlay=x=(W-w)/2:y=(H-h)/2 [video_fg];",
                         watermarkOverlay,
                         "\"",
-                        "-map \"[v]\" -map \"a:0?\" -c:v libx265 -crf 25 -c:a aac",
+                        #"-map \"[v]\" -map \"a:0?\" -c:v libx265 -crf 25 -c:a aac",
+                        "-map \"[v]\" -map \"a:0?\" -c:v h264 -crf 21 -preset veryfast -c:a aac",
                         outputFile
                         ])
         return cmd
