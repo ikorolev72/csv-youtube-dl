@@ -1,11 +1,14 @@
 # Download a video from youtube using a CSV file and convert it according to the rules
 
 ## Version
-#### 1.1.1 20200411
-  + initial version
-
+#### 1.2 20200412
 
 #### Whats new
+1.2 20200412
+  
+  + Added watermark position
+  + Added moveMaskWidthPercent  - possibility move mask to left or right from center ( for `make_veritcal=1` videos )
+
 1.1.1 20200411
   
   + Fixed errors
@@ -75,6 +78,8 @@ Sample of config:
   },
   "video": {
     "watermarkFile" : "images/watermark.png", // path to watermark image
+    "watermarkPosition" : "top-right", // values: bottom-right( default), bottom-left, bottom-middle, top-right, top-left, top-middle, center-right, center-left, center-middle
+    "moveMaskWidthPercent" : 50, //  you can move crop part to left or right. Values: from 0 to 100, default - 50 ( center ). 0 - left part, 100 - right.
     "width": 852, 
     "height": 480
   }

@@ -24,8 +24,10 @@ class processing:
         self.logLevel = config['general']['ffmpegLogLevel']
 
         self.watermarkFile = config['video']['watermarkFile']
+        self.watermarkPosition = config['video']['watermarkPosition']
         self.width = str(config['video']['width'])
         self.height = str(config['video']['height'])
+        self.moveMaskWidthPercent= str(config['video']['moveMaskWidthPercent'])
 
     def get_script_path(self):
         return os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -58,9 +60,9 @@ class processing:
         dt = today.strftime('%Y-%m-%d %H:%M:%S')
         sys.stderr.write(dt+" "+message+"\n")
         try:
-            #if not os.path.isfile(self.logFile):
+            # if not os.path.isfile(self.logFile):
             #  f=open(self.logFile, "w")
-            #else:
+            # else:
             f = open(self.logFile, "a")
             f.write(dt+" "+message+"\n")
             f.close()
@@ -81,9 +83,12 @@ class processing:
         height = self.height
         if "0" == str(make_vertical):
             cropFilter = "scale=w=min(iw*"+height+"/ih\,"+width+"):h=min(" + \
-                height+"\,ih*"+width + "/iw), setsar=1 "
+                height+"\,ih*"+width + "/iw), setsar=1 "               
+
         else:
-            cropFilter = "scale=h="+height+":w=-2, crop=h="+height+":w="+width+", setsar=1"
+            if int( self.moveMaskWidthPercent) <0 or int(self.moveMaskWidthPercent)>100 :
+                self.moveMaskWidthPercent="50"            
+            cropFilter = "scale=h="+height+":w=-2, crop=x=(in_w-out_w)/100*"+self.moveMaskWidthPercent+":h="+height+":w="+width+", setsar=1"
 
         i = 1
         if "0" == str(placeholder) or not os.path.isfile(placeholder):
@@ -115,13 +120,40 @@ class processing:
             watermark = 0
             self.writeLog(
                 "Warning: watermark file do not exists. Please, check config file ")
-        if int(watermark) == 1:
-            watermarkIndex = i
-            i = i+1
-            inputWatermark = "-loop 1 -i "+self.watermarkFile + \
-                " -ss "+time_start+" -to "+time_finish
-            watermarkOverlay = "["+str(watermarkIndex) + \
-                ":v] null [watermark]; [video_fg][watermark] overlay=x=W-w:y=H-h[v]"
+        else:
+            if int(watermark) == 1:
+                watermarkIndex = i
+                i = i+1
+                inputWatermark = "-loop 1 -i "+self.watermarkFile + \
+                    " -ss "+time_start+" -to "+time_finish
+                watermarkOverlay = "["+str(watermarkIndex) + \
+                    ":v] null [watermark]; [video_fg][watermark] overlay=x=W-w:y=H-h[v]"
+                if "bottom-left" == self.watermarkPosition: #
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                    ":v] null [watermark]; [video_fg][watermark] overlay=x=0:y=H-h[v]"
+                if "bottom-middle" == self.watermarkPosition: #
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                        ":v] null [watermark]; [video_fg][watermark] overlay=x=(W-w)/2:y=H-h[v]"                       
+                if "top-left" == self.watermarkPosition: #
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                        ":v] null [watermark]; [video_fg][watermark] overlay=x=0:y=0[v]"
+                if "top-right" == self.watermarkPosition: #
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                        ":v] null [watermark]; [video_fg][watermark] overlay=x=W-w:y=0[v]"
+                if "top-middle" == self.watermarkPosition: #
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                        ":v] null [watermark]; [video_fg][watermark] overlay=x=(W-w)/2:y=0[v]"                                               
+                if "center-left" == self.watermarkPosition:
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                        ":v] null [watermark]; [video_fg][watermark] overlay=x=0:y=(H-h)/2[v]"
+                if "center-right" == self.watermarkPosition:
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                        ":v] null [watermark]; [video_fg][watermark] overlay=x=W-w:y=(H-h)/2[v]"
+                if "center-middle" == self.watermarkPosition: #
+                    watermarkOverlay = "["+str(watermarkIndex) + \
+                        ":v] null [watermark]; [video_fg][watermark] overlay=x=(W-w)/2:y=(H-h)/2[v]"  
+                        
+
 
         cmd = ' '.join([self.ffmpeg,
                         "-y",

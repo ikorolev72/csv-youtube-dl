@@ -9,6 +9,8 @@
   },
   "video": {
     "watermarkFile" : "images/watermark.png",
+    "watermarkPosition" : "center-right",
+    "moveMaskWidthPercent" : 75,
     "width": 480,
     "height": 852
   }
